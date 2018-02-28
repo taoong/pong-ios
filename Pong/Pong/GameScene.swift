@@ -14,11 +14,14 @@ class GameScene: SKScene {
     var ball = SKSpriteNode()
     var enemy = SKSpriteNode()
     var main = SKSpriteNode()
+    var mainScore = SKLabelNode()
+    var enemyScore = SKLabelNode()
     
     var score = [Int]()
     
     func startGame() {
         score = [0, 0]
+        ball.physicsBody?.applyImpulse(CGVector(dx: -20, dy: -20))
     }
     
     func addScore(player : SKSpriteNode) {
@@ -29,9 +32,11 @@ class GameScene: SKScene {
         if player == main {
             score[0] += 1
             ball.physicsBody?.applyImpulse(CGVector(dx: 20, dy: 20))
+            mainScore.text = "\(score[0])"
         } else if player == enemy {
             score[1] += 1
             ball.physicsBody?.applyImpulse(CGVector(dx: -20, dy: -20))
+            enemyScore.text = "\(score[1])"
         }
         
     }
@@ -43,8 +48,8 @@ class GameScene: SKScene {
         ball = self.childNode(withName: "ball") as! SKSpriteNode
         main = self.childNode(withName: "main") as! SKSpriteNode
         enemy = self.childNode(withName: "enemy") as! SKSpriteNode
-        
-        ball.physicsBody?.applyImpulse(CGVector(dx: -20, dy: -20))
+        mainScore = self.childNode(withName: "mainScore") as! SKLabelNode
+        enemyScore = self.childNode(withName: "enemyScore") as! SKLabelNode
         
         let border = SKPhysicsBody(edgeLoopFrom: self.frame)
         
@@ -69,7 +74,20 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        enemy.run(SKAction.moveTo(x: ball.position.x, duration: 1.0))
+        
+        switch currentGameType {
+        case .easy:
+            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 1.3))
+            break
+        case .medium:
+            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 1.0))
+            break
+        case .hard:
+            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 0.7))
+            break
+        }
+        
+        
         if ball.position.y <= main.position.y - 70 {
             addScore(player: enemy)
         } else if ball.position.y >= enemy.position.y + 70  {
