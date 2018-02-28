@@ -43,8 +43,6 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        startGame()
-        
         ball = self.childNode(withName: "ball") as! SKSpriteNode
         main = self.childNode(withName: "main") as! SKSpriteNode
         enemy = self.childNode(withName: "enemy") as! SKSpriteNode
@@ -57,6 +55,8 @@ class GameScene: SKScene {
         border.restitution = 1
         
         self.physicsBody = border
+        
+        startGame()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -77,13 +77,13 @@ class GameScene: SKScene {
         
         switch currentGameType {
         case .easy:
-            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 1.3))
+            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 1.2))
             break
         case .medium:
-            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 1.0))
+            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 0.8))
             break
         case .hard:
-            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 0.7))
+            enemy.run(SKAction.moveTo(x: ball.position.x, duration: 0.3))
             break
         }
         
